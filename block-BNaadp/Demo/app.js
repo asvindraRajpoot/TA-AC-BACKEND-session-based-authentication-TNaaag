@@ -19,6 +19,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//middleware for cookie parser
+app.use((req,res,next)=>{
+
+  res.cookie('username','asvindra');
+  console.log(req.cookies);
+  next();
+})
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -28,12 +38,6 @@ app.use(function(req, res, next) {
 });
 
 
-//middleware for cookie parser
-app.use((req,res,next)=>{
-
-  res.cookie('username','asvindra');
-  next();
-})
 
 
 
