@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose=require('mongoose');
 var session=require('express-session');
-var MongoStore = require('connect-mongo')(session);
+var MongoStore = require('connect-mongo');
 
 //require('dotenv').config()
 
@@ -15,10 +15,8 @@ var usersRouter = require('./routes/users');
 
 
 
-mongoose.connect('mongodb://localhost/users',{
-  useNewUrlParser:true,
-  useUnifiedTopology:true
-},(err)=>{
+mongoose.connect('mongodb://localhost/users',
+(err)=>{
   console.log(err?err:'Connected to Database');
 })
 
@@ -37,10 +35,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //add session and persit user in session
 app.use(session({
-   secret:'somerandomsecret',
+   secret:"somerandomsecret",
    resave:false,
    saveUninitialized:false,
-   store: new MongoStore({mongooseConnection:mongoose.connection})
+   store:  MongoStore.create({mongoUrl:'mongodb://localhost/users'})
 }))
 
 
