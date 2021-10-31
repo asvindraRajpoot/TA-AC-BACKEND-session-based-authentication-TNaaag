@@ -22,7 +22,8 @@ router.get('/login',(req,res,next)=>{
 
 //render register form
 router.get('/register',(req,res,next)=>{
-  res.render('register');
+  var error=req.flash('error')[0];
+  res.render('register',{error});
   //next();
 })
 
@@ -31,10 +32,21 @@ router.get('/register',(req,res,next)=>{
 router.post('/register',(req,res,next)=>{
   console.log(req.body);
   User.create(req.body,(err,user)=>{
-    if(err)return next(err);
+    if(err){
+      if(err.name==='MongoError'){
+        req.flash('error','This email is taken');
+        return res.redirect('/users/registers');
+      }
+
+      if(err.name==='ValidationError'){
+        req.flash('error',err.message);
+        return res.redirect('/users/register');
+      }
+      return res.json({err});
+    }
     //console.log('after saving into database',user);
-    req.flash('error','User hasbeen Successfully registered');
-    res.render('logIn');
+   // req.flash('error','User hasbeen Successfully registered');
+    res.redirect('/users/logIn');
   })
   
 })
@@ -47,7 +59,7 @@ router.post('/login',(req,res,next)=>{
   //console.log(email,password);
   if(!email || !password){
     req.flash('error','Email/Password is required');
-    res.redirect('/users/login');
+      return res.redirect('/users/login');
    
   }
 
@@ -55,7 +67,7 @@ router.post('/login',(req,res,next)=>{
    if(err)return next(err)
    if(!user){
      req.flash('error','user does not exist');
-     res.redirect('/users/login');
+     return res.redirect('/users/login');
    }
 
    //compare the password
@@ -63,7 +75,7 @@ router.post('/login',(req,res,next)=>{
     if(err)return next(err);
     if(!result){
       req.flash('error','Password is not correct');
-      res.redirect('/users/login');
+      return res.redirect('/users/login');
     }else{
       //persist the userlogin using session
 
