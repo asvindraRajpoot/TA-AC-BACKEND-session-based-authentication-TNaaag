@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var flash=require('connect-flash');
+var Product=require('../models/product');
+var User=require('../models/user');
 
 
 var User =require('../models/user');
@@ -82,9 +84,9 @@ router.post('/userLogin',(req,res,next)=>{
 
 
      
-       req.session.userI=user.id;
+       req.session.userId=user.id;
        req.flash('error','userLogin Successful');
-       res.redirect('/users/dashboard');
+       res.redirect('/users/userDashboard');
 
     }
 
@@ -94,9 +96,9 @@ router.post('/userLogin',(req,res,next)=>{
   
 })
 
-router.get('/dashboard',(req,res)=>{
+router.get('/userDashboard',(req,res)=>{
   let error=req.flash('error')[0];
-  res.render('dashboard',{error});
+  res.render('userDashboard',{error});
 })
 
 //handle logout
@@ -111,10 +113,46 @@ router.get('/logout',(req,res)=>{
 
 ///handle user product list
 
-router.get('/userProductList',(req,res)=>{
-  res.render('userProductList');
+router.get('/userProductList',(req,res,next)=>{
+  Product.find({},(err,products)=>{
+    if(err)return next(err);
+    User.findById(req.session.userId,(err,user)=>{
+      if(err)return next(err);
+
+      res.render('userProductList',{products:products,cart:user.cart});
+    })
+    
+  })
+  
 })
 
+//like the product
+router.get('/userProductList/likes/:id',(req,res)=>{
+  
+  let id =req.params.id;
+  Product.findByIdAndUpdate(id,{$inc:{likes:1}},{upsert:true,new:true},(err,updatedProduct)=>{
+   if(err)return next(err);
+   res.redirect('/users/userProductList');
+  })
+})
+
+
+//handle cart
+router.get('/userProductList/cart/:id',(req,res,next)=>{
+  let id =req.params.id;
+
+  Product.findByIdAndUpdate(id,{$inc:{quantity:-1}},{upsert:true,new:true},(err,updatedProduct)=>{
+    if(err)return next(err);
+  User.findByIdAndUpdate(req.session.userId,{$inc:{cart:1}},{upsert:true,new:true},(err,updatedUser)=>{
+  
+    if(err) return next(err);
+    res.redirect('/users/userProductList');
+  })
+   
+  })
+
+
+})
 
 
 module.exports = router;

@@ -143,3 +143,26 @@ input:focus{
   border: .1rem solid blue;
 }
 
+.text-center{
+    text-align: center;
+}
+
+.btn{
+    background-color: gray;
+    padding: .3rem .7rem;
+    border: unset;
+    border: .1rem solid gray;
+    border-radius: .2rem;
+    margin: 0 .3rem;
+  }
+
+.user-pro{
+    margin-top: 2rem;
+}
+
+
+.admin-buttons{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}

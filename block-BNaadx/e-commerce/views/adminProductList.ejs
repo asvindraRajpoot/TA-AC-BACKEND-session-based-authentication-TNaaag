@@ -11,7 +11,7 @@
   <header>
     <div class="container flex">
       <a href="/">E-Commerce</a>
-      <a href="/admin/product/new" class="create">Create Product</a>
+      <a href="/admin/product/new" class="create">Add Product</a>
     </div>
 
   </header>
@@ -20,12 +20,27 @@
       <h1>Products List</h1>
     </div>
     <div class="container">
-        <ul>
+        <ul class="products-box">
           
 
-            <li></li>
+            <%products.forEach(p=>{%>
+                <div class="product">
+
+               
+                <h3>Name: <%=p.name%></h3>
+                <small>Price: <%=p.price%></small>
+                <small>No: <%=p.quantity%></small>
+                <small>Likes: <%=p.likes%></small>
+                <div class="buttons">
+                    <a href="/admin/adminProductList/edit/<%=p.id%>" class="btn">Update</a>
+                    <a href="/admin/adminProductList/delete/<%=p.id%>" class="btn">Delete</a>
+                </div>
+               
+            </div>
+            <%})%>
+           
             <div class="show">
-                <a href="/admin/">Show</a>
+               
             </div>
 
          
