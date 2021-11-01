@@ -305,3 +305,51 @@ strong{
   font-size: 2rem;
   color: green;
 }
+
+.product{
+  background-color: black;
+  color: white;
+  display: flex;
+  margin: 1rem 0;
+  width: 25%;
+  border-radius: .2rem;
+  align-items: center;
+  flex-direction: column;
+  text-align: start;
+  padding: 1rem;
+}
+
+h3{
+  font-size: 2rem;
+  font-weight: bold;
+}
+.price,.quantity{
+  display: inline-block;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.products-box{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.btn{
+  background-color: gray;
+  padding: .3rem .7rem;
+  border: unset;
+  border: .1rem solid gray;
+  border-radius: .2rem;
+  margin: 0 .3rem;
+}
+
+.buttons{
+  display: flex;
+  justify-content: space-between;
+}
+
+.error{
+  color: red;
+  
+}
